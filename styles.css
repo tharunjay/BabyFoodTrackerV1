@@ -42,23 +42,6 @@ body {
   overflow-x: hidden;
 }
 
-.goose-watermark {
-  position: fixed;
-  bottom: -40px;
-  right: -60px;
-  width: 420px;
-  height: 420px;
-  opacity: 0.09;
-  z-index: 0;
-  pointer-events: none;
-  transform: rotate(-6deg);
-}
-
-.app-header, .alerts, .week-nav, .plan-root, .shopping, .app-footer {
-  position: relative;
-  z-index: 1;
-}
-
 h1, h2, h3, h4 { color: var(--ink); margin: 0 0 0.4em; font-weight: 650; letter-spacing: -0.015em; }
 h1 { font-size: 2rem; letter-spacing: -0.025em; }
 h2 { font-size: 1.12rem; }
@@ -248,6 +231,16 @@ p { margin: 0 0 0.6em; }
 
 .day-head .dow { font-weight: 700; color: var(--ink); }
 .day-head .date { color: var(--ink-soft); font-size: 0.83rem; }
+.day-head .day-kcal {
+  margin-left: auto;
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+}
 
 .meal {
   display: grid;
@@ -284,6 +277,10 @@ p { margin: 0 0 0.6em; }
   font-size: 0.78rem;
   color: var(--ink-soft);
   margin-top: 2px;
+}
+.meal-kcal {
+  color: var(--accent-strong);
+  font-weight: 600;
 }
 
 .meal.done .meal-text { text-decoration: line-through; color: var(--ink-soft); }
@@ -358,7 +355,6 @@ p { margin: 0 0 0.6em; }
 .reset-btn:hover { border-color: var(--warn); color: var(--warn); background: #fff5f5; }
 
 @media (max-width: 720px) {
-  .goose-watermark { width: 280px; height: 280px; bottom: -30px; right: -40px; opacity: 0.07; }
   .app-header { grid-template-columns: 1fr; padding: 28px 18px 8px; }
   .profile { width: 100%; min-width: 0; }
   .alerts { grid-template-columns: 1fr; gap: 18px; padding: 20px 20px; }

@@ -7,26 +7,16 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <svg class="goose-watermark" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <ellipse cx="180" cy="200" rx="100" ry="80" fill="#FFE08A"/>
-    <ellipse cx="210" cy="200" rx="40" ry="28" fill="#F5C652" transform="rotate(-12 210 200)"/>
-    <circle cx="110" cy="120" r="55" fill="#FFE08A"/>
-    <path d="M 130 165 Q 150 200 195 215 L 185 235 Q 145 220 120 190 Z" fill="#FFE08A"/>
-    <path d="M 60 118 L 30 126 L 60 138 Z" fill="#F49F2A"/>
-    <circle cx="100" cy="110" r="6" fill="#222"/>
-    <circle cx="102" cy="108" r="2.5" fill="#fff"/>
-    <rect x="170" y="270" width="10" height="32" rx="3" fill="#F49F2A"/>
-    <rect x="215" y="270" width="10" height="32" rx="3" fill="#F49F2A"/>
-    <path d="M 150 302 Q 175 302 200 302 L 192 312 L 158 312 Z" fill="#F49F2A"/>
-    <path d="M 195 302 Q 220 302 245 302 L 237 312 L 203 312 Z" fill="#F49F2A"/>
-  </svg>
-
   <header class="app-header">
     <div class="header-inner">
       <h1>Goose's Food Tracker <span class="version">V1</span></h1>
       <p class="subtitle">Meal plan · 6 → 8+ months</p>
     </div>
     <div class="profile">
+      <div class="profile-row">
+        <span class="label">Age today</span>
+        <span id="ageNow" class="value"></span>
+      </div>
       <div class="profile-row">
         <span class="label">Plan window</span>
         <span id="planWindow" class="value"></span>
@@ -52,6 +42,7 @@
         <li><strong>Tough first, easy last.</strong> Meal 1 is the heaviest, highest-fibre meal. Each later meal is lighter on the stomach.</li>
         <li><strong>3 days in a row, never alternate.</strong> Every food — fruit, veggie, egg, PB, meat — runs 3 consecutive days before rotating.</li>
         <li><strong>Allergen rhythm:</strong> eggs Mon–Wed · peanut butter Thu–Sat · Sunday rest. Tiles with egg or peanut butter are marked with a dark-green pill.</li>
+        <li><strong>Caloric needs:</strong> 6 months ~600 kcal/day total · 7–8 months ~650–700 kcal/day · 9+ months ~750 kcal/day. Solids contribute ~200 kcal/day at 6m, ~300 kcal/day at 9m — the rest comes from breast milk / hypoallergenic formula. Each tile shows an estimated kcal value; each day card shows the daily solids total.</li>
         <li>Cook everything well. Peel, deseed and mash or finely shred.</li>
         <li>Iron-rich foods at Meal 1 every day (lentils, then meats from week 5).</li>
         <li>Continue 500–700 ml/day breast milk or hypoallergenic formula; sips of water at every meal.</li>
@@ -84,6 +75,9 @@
       startDate: '2026-05-18',
       endDate: '2026-07-31',
     };
+
+    // Internal only — used to compute the running age. Never rendered.
+    const BIRTH_DATE = '2025-11-09';
 
     const ROTATION = 'Eggs Mon–Wed · Peanut butter Thu–Sat · Sun rest';
 
@@ -600,6 +594,31 @@
 
     const dow = (iso) => parseDate(iso).toLocaleDateString(undefined, { weekday: 'short' });
 
+    const ageString = (fromISO, toISO) => {
+      const from = parseDate(fromISO);
+      const to = parseDate(toISO);
+      let months = (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth());
+      let days = to.getDate() - from.getDate();
+      if (days < 0) {
+        months -= 1;
+        const prevMonth = new Date(to.getFullYear(), to.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+      return `${months} months, ${days} day${days === 1 ? '' : 's'}`;
+    };
+
+    // ISO 8601 week number (1–53). Weeks start on Monday; week 1 contains the year's first Thursday.
+    const isoWeek = (iso) => {
+      const d = parseDate(iso);
+      const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      const day = t.getUTCDay() || 7;
+      t.setUTCDate(t.getUTCDate() + 4 - day);
+      const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+      return Math.ceil((((t - yearStart) / 86400000) + 1) / 7);
+    };
+
+    const weekLabel = (week) => `CW${isoWeek(week.days[0].date)}`;
+
     const loadState = () => {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -615,6 +634,7 @@
     if (!state.meals) state.meals = {};
 
     const renderProfile = () => {
+      document.getElementById('ageNow').textContent = ageString(BIRTH_DATE, todayISO());
       document.getElementById('planWindow').textContent =
         `${fmtDate(PROFILE.startDate)} → ${fmtDate(PROFILE.endDate)} 2026`;
     };
@@ -624,7 +644,7 @@
       nav.innerHTML = '';
       PLAN.forEach((week, idx) => {
         const btn = document.createElement('button');
-        btn.textContent = week.label;
+        btn.textContent = weekLabel(week);
         btn.type = 'button';
         if (idx === activeIdx) btn.classList.add('active');
         btn.addEventListener('click', () => render(idx));
@@ -638,6 +658,73 @@
       { key: 'm3', label: 'Meal 3', code: 'm3' },
       { key: 'm4', label: 'Meal 4', code: 'm4' },
     ];
+
+    const KCAL_PER_TBSP = {
+      'rice porridge': 12,
+      'pasta': 10,
+      'red lentil': 14,
+      'sweet potato': 10,
+      'butternut': 6,
+      'pumpkin': 5,
+      'parsnip': 10,
+      'zucchini': 3,
+      'broccoli': 5,
+      'cauliflower': 3,
+      'pea': 10,
+      'pear': 8,
+      'apple': 8,
+      'banana': 12,
+      'mango': 9,
+      'blueberry': 9,
+      'peach': 6,
+      'avocado': 25,
+      'chicken': 22,
+      'cod': 12,
+      'salmon': 25,
+      'beef': 28,
+      'lamb': 28,
+    };
+
+    const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const KCAL_MATCHERS = Object.entries(KCAL_PER_TBSP).map(([key, kcal]) => ({
+      kcal,
+      re: new RegExp('\\b' + escapeRegex(key) + 's?\\b', 'i'),
+    }));
+
+    const parseRange = (a, b) => {
+      const min = parseInt(a, 10);
+      const max = b ? parseInt(b, 10) : min;
+      return (min + max) / 2;
+    };
+
+    const estimateMealKcal = (meal) => {
+      let total = 0;
+      const text = meal.text.toLowerCase();
+      const amount = meal.amount.toLowerCase();
+
+      if (/\beggs?\b/.test(text)) total += 60;
+
+      if (/peanut butter|\bpb\b/.test(text)) {
+        const pbMatch = amount.match(/(\d+)(?:\s*[–-]\s*(\d+))?\s*tsp/);
+        const tsps = pbMatch ? parseRange(pbMatch[1], pbMatch[2]) : 1;
+        total += tsps * 30;
+      }
+
+      const tbspMatch = amount.match(/(\d+)(?:\s*[–-]\s*(\d+))?\s*tbsp/);
+      const tbsp = tbspMatch ? parseRange(tbspMatch[1], tbspMatch[2]) : 0;
+
+      const matched = [];
+      KCAL_MATCHERS.forEach(({ kcal, re }) => {
+        if (re.test(text)) matched.push(kcal);
+      });
+
+      if (matched.length && tbsp > 0) {
+        const avg = matched.reduce((a, b) => a + b, 0) / matched.length;
+        total += tbsp * avg;
+      }
+
+      return Math.round(total);
+    };
 
     const detectAllergens = (text) => {
       const tags = [];
@@ -660,13 +747,14 @@
       } else if (meal.isNew) {
         tagHtml = `<span class="new-tag" title="${meal.isNew}">NEW · ${meal.isNew}</span>`;
       }
+      const kcal = estimateMealKcal(meal);
       return `
         <label class="meal ${doneClass}">
           <input type="checkbox" data-meal-id="${id}" ${checked} />
           <span>
             <span class="meal-label">${slot.label}</span>
             <span class="meal-text">${meal.text}${tagHtml}</span>
-            <span class="meal-amount">${meal.amount}</span>
+            <span class="meal-amount">${meal.amount} · <span class="meal-kcal">~${kcal} kcal</span></span>
           </span>
         </label>
       `;
@@ -692,11 +780,16 @@
       const daysHtml = week.days.map((day) => {
         const isToday = day.date === today;
         const rows = MEAL_SLOTS.map((slot) => mealRow(slot, day.meals[slot.key], day.date)).join('');
+        const dayKcal = MEAL_SLOTS.reduce((sum, slot) => {
+          const meal = day.meals[slot.key];
+          return sum + (meal ? estimateMealKcal(meal) : 0);
+        }, 0);
         return `
           <div class="day-card ${isToday ? 'today' : ''}">
             <div class="day-head">
               <span class="dow">${dow(day.date)}</span>
               <span class="date">${fmtDate(day.date)}</span>
+              <span class="day-kcal">~${dayKcal} kcal</span>
             </div>
             ${rows}
           </div>
@@ -706,7 +799,7 @@
       root.innerHTML = `
         <article class="week-card">
           <header class="week-head">
-            <h2>${week.label}</h2>
+            <h2>${weekLabel(week)}</h2>
             <span class="week-dates">${fmtDate(start)} – ${fmtDate(end)}</span>
           </header>
           <p class="week-stage">${week.stage}</p>
