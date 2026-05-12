@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Baby Food Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <h1>Baby Food Tracker</h1>
+      <p class="subtitle">Meal plan: 6 months &rarr; 8 months</p>
+    </div>
+    <div class="profile">
+      <div class="profile-row">
+        <span class="label">Born</span>
+        <span id="birthDate" class="value"></span>
+      </div>
+      <div class="profile-row">
+        <span class="label">Age today</span>
+        <span id="ageToday" class="value"></span>
+      </div>
+      <div class="profile-row">
+        <span class="label">Plan window</span>
+        <span id="planWindow" class="value"></span>
+      </div>
+    </div>
+  </header>
+
+  <section class="alerts">
+    <h2>Always avoid</h2>
+    <ul class="avoid-list">
+      <li><strong>Cow's milk dairy</strong> &mdash; no cow's milk, butter, yogurt, cheese, cream, whey, casein. Read labels.</li>
+      <li><strong>Carrots</strong> &mdash; reported reaction; skip in purees and finger foods.</li>
+      <li><strong>Honey</strong> &mdash; never before 12 months (botulism risk).</li>
+      <li><strong>Added salt &amp; sugar</strong> &mdash; not suitable for babies.</li>
+      <li><strong>Whole nuts, large chunks, whole grapes</strong> &mdash; choking risk.</li>
+    </ul>
+    <h2>Easy on the tummy</h2>
+    <ul class="tips-list">
+      <li>Introduce <em>one</em> new food at a time and wait 3 days before the next new one.</li>
+      <li>Start with small amounts (1&ndash;2 tsp). Increase only if stools and skin stay calm.</li>
+      <li>Cook well, peel, deseed, blend smooth at first. Thicken textures gradually.</li>
+      <li>Keep iron-rich foods daily (meat, lentils, fortified oats).</li>
+      <li>Continue breast milk or hypoallergenic formula on demand &mdash; food is for learning, milk still feeds.</li>
+    </ul>
+  </section>
+
+  <nav class="week-nav" id="weekNav"></nav>
+
+  <main id="planRoot" class="plan-root"></main>
+
+  <section class="trial-log">
+    <h2>New food trial log</h2>
+    <p class="hint">Tick each new food on day 1, day 2, day 3 to confirm no reaction. Notes save automatically.</p>
+    <div id="trialList" class="trial-list"></div>
+  </section>
+
+  <section class="shopping">
+    <h2>Shopping list (current week)</h2>
+    <ul id="shoppingList" class="shopping-list"></ul>
+  </section>
+
+  <footer class="app-footer">
+    <button id="resetBtn" class="reset-btn" type="button">Reset all tracking</button>
+    <p class="disclaimer">
+      General planning aid only. Always confirm with your pediatrician or an allergist, especially with a known
+      cow's milk allergy &mdash; they may want a specific allergen-introduction schedule.
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
