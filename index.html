@@ -14,6 +14,10 @@
     </div>
     <div class="profile">
       <div class="profile-row">
+        <span class="label">Age today</span>
+        <span id="ageNow" class="value"></span>
+      </div>
+      <div class="profile-row">
         <span class="label">Plan window</span>
         <span id="planWindow" class="value"></span>
       </div>
@@ -71,6 +75,9 @@
       startDate: '2026-05-18',
       endDate: '2026-07-31',
     };
+
+    // Internal only — used to compute the running age. Never rendered.
+    const BIRTH_DATE = '2025-11-09';
 
     const ROTATION = 'Eggs Mon–Wed · Peanut butter Thu–Sat · Sun rest';
 
@@ -587,6 +594,31 @@
 
     const dow = (iso) => parseDate(iso).toLocaleDateString(undefined, { weekday: 'short' });
 
+    const ageString = (fromISO, toISO) => {
+      const from = parseDate(fromISO);
+      const to = parseDate(toISO);
+      let months = (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth());
+      let days = to.getDate() - from.getDate();
+      if (days < 0) {
+        months -= 1;
+        const prevMonth = new Date(to.getFullYear(), to.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+      return `${months} months, ${days} day${days === 1 ? '' : 's'}`;
+    };
+
+    // ISO 8601 week number (1–53). Weeks start on Monday; week 1 contains the year's first Thursday.
+    const isoWeek = (iso) => {
+      const d = parseDate(iso);
+      const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      const day = t.getUTCDay() || 7;
+      t.setUTCDate(t.getUTCDate() + 4 - day);
+      const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+      return Math.ceil((((t - yearStart) / 86400000) + 1) / 7);
+    };
+
+    const weekLabel = (week) => `CW${isoWeek(week.days[0].date)}`;
+
     const loadState = () => {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -602,6 +634,7 @@
     if (!state.meals) state.meals = {};
 
     const renderProfile = () => {
+      document.getElementById('ageNow').textContent = ageString(BIRTH_DATE, todayISO());
       document.getElementById('planWindow').textContent =
         `${fmtDate(PROFILE.startDate)} → ${fmtDate(PROFILE.endDate)} 2026`;
     };
@@ -611,7 +644,7 @@
       nav.innerHTML = '';
       PLAN.forEach((week, idx) => {
         const btn = document.createElement('button');
-        btn.textContent = week.label;
+        btn.textContent = weekLabel(week);
         btn.type = 'button';
         if (idx === activeIdx) btn.classList.add('active');
         btn.addEventListener('click', () => render(idx));
@@ -766,7 +799,7 @@
       root.innerHTML = `
         <article class="week-card">
           <header class="week-head">
-            <h2>${week.label}</h2>
+            <h2>${weekLabel(week)}</h2>
             <span class="week-dates">${fmtDate(start)} – ${fmtDate(end)}</span>
           </header>
           <p class="week-stage">${week.stage}</p>
