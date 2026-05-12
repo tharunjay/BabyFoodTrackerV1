@@ -226,6 +226,7 @@ p { margin: 0 0 0.6em; }
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  gap: 8px;
   margin-bottom: 8px;
 }
 
