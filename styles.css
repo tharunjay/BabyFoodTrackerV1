@@ -1,0 +1,272 @@
+:root {
+  --bg: #fbf7f2;
+  --surface: #ffffff;
+  --surface-alt: #fef3ec;
+  --ink: #2b2a33;
+  --ink-soft: #5a5763;
+  --accent: #e07a5f;
+  --accent-soft: #f6c7b6;
+  --good: #4a8754;
+  --warn: #b8421c;
+  --rule: #ecdfd1;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 6px 18px rgba(0, 0, 0, 0.05);
+  --radius: 14px;
+  --maxw: 980px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4 { color: var(--ink); margin: 0 0 0.4em; }
+h1 { font-size: 1.7rem; }
+h2 { font-size: 1.15rem; letter-spacing: 0.01em; }
+h3 { font-size: 1rem; }
+
+p { margin: 0 0 0.6em; }
+
+.app-header {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 28px 20px 12px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: end;
+}
+
+.header-inner .subtitle {
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.profile {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  box-shadow: var(--shadow);
+  font-size: 0.9rem;
+  min-width: 240px;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 0;
+}
+
+.profile-row .label { color: var(--ink-soft); }
+.profile-row .value { font-weight: 600; }
+
+.alerts, .trial-log, .shopping, .app-footer {
+  max-width: var(--maxw);
+  margin: 18px auto;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.alerts { background: var(--surface-alt); }
+
+.avoid-list, .tips-list { margin: 0 0 8px; padding-left: 1.1em; }
+.avoid-list li, .tips-list li { margin: 4px 0; }
+.avoid-list strong { color: var(--warn); }
+
+.week-nav {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 6px 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.week-nav button {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--ink-soft);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.week-nav button:hover { border-color: var(--accent-soft); }
+.week-nav button.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.plan-root { max-width: var(--maxw); margin: 0 auto; padding: 10px 20px; }
+
+.week-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+
+.week-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.week-head h2 { margin: 0; }
+.week-head .week-dates { color: var(--ink-soft); font-size: 0.9rem; }
+.week-stage { color: var(--ink-soft); margin-bottom: 12px; font-style: italic; }
+
+.week-focus {
+  background: var(--surface-alt);
+  border-left: 3px solid var(--accent);
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  font-size: 0.92rem;
+}
+
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.day-card {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 12px;
+  background: #fffdfb;
+}
+
+.day-card.today {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.day-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.day-head .dow { font-weight: 600; }
+.day-head .date { color: var(--ink-soft); font-size: 0.85rem; }
+
+.meal {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  align-items: start;
+  padding: 5px 0;
+  border-top: 1px dashed var(--rule);
+}
+.meal:first-of-type { border-top: none; }
+
+.meal input[type="checkbox"] {
+  margin-top: 4px;
+  accent-color: var(--good);
+  cursor: pointer;
+}
+
+.meal-label {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+.meal-text { font-size: 0.95rem; }
+.meal.done .meal-text { text-decoration: line-through; color: var(--ink-soft); }
+
+.new-tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.68rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 4px;
+  vertical-align: middle;
+  letter-spacing: 0.04em;
+}
+
+.trial-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.trial-card {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fffdfb;
+}
+
+.trial-card h4 { margin: 0 0 4px; font-size: 0.95rem; }
+.trial-card .intro-date { color: var(--ink-soft); font-size: 0.8rem; margin-bottom: 6px; }
+.trial-days { display: flex; gap: 10px; margin-bottom: 6px; }
+.trial-days label { font-size: 0.85rem; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+.trial-card textarea {
+  width: 100%;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 6px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  resize: vertical;
+  min-height: 38px;
+  background: #fff;
+}
+
+.shopping-list {
+  margin: 0;
+  padding-left: 1.1em;
+  columns: 2;
+  column-gap: 24px;
+}
+.shopping-list li { margin: 3px 0; break-inside: avoid; }
+
+.hint { color: var(--ink-soft); font-size: 0.88rem; margin-top: 0; }
+
+.app-footer { text-align: center; }
+.disclaimer { color: var(--ink-soft); font-size: 0.82rem; margin: 8px 0 0; }
+
+.reset-btn {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.reset-btn:hover { border-color: var(--warn); color: var(--warn); }
+
+@media (max-width: 640px) {
+  .app-header { grid-template-columns: 1fr; }
+  .profile { width: 100%; min-width: 0; }
+  .shopping-list { columns: 1; }
+  h1 { font-size: 1.4rem; }
+}
