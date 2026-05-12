@@ -7,10 +7,24 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <svg class="goose-watermark" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <ellipse cx="180" cy="200" rx="100" ry="80" fill="#FFE08A"/>
+    <ellipse cx="210" cy="200" rx="40" ry="28" fill="#F5C652" transform="rotate(-12 210 200)"/>
+    <circle cx="110" cy="120" r="55" fill="#FFE08A"/>
+    <path d="M 130 165 Q 150 200 195 215 L 185 235 Q 145 220 120 190 Z" fill="#FFE08A"/>
+    <path d="M 60 118 L 30 126 L 60 138 Z" fill="#F49F2A"/>
+    <circle cx="100" cy="110" r="6" fill="#222"/>
+    <circle cx="102" cy="108" r="2.5" fill="#fff"/>
+    <rect x="170" y="270" width="10" height="32" rx="3" fill="#F49F2A"/>
+    <rect x="215" y="270" width="10" height="32" rx="3" fill="#F49F2A"/>
+    <path d="M 150 302 Q 175 302 200 302 L 192 312 L 158 312 Z" fill="#F49F2A"/>
+    <path d="M 195 302 Q 220 302 245 302 L 237 312 L 203 312 Z" fill="#F49F2A"/>
+  </svg>
+
   <header class="app-header">
     <div class="header-inner">
       <h1>Goose's Food Tracker <span class="version">V1</span></h1>
-      <p class="subtitle">Meal plan · 6 → 8 months</p>
+      <p class="subtitle">Meal plan · 6 → 8+ months</p>
     </div>
     <div class="profile">
       <div class="profile-row">
@@ -26,7 +40,7 @@
       <ul class="avoid-list">
         <li><strong>Cow's milk dairy</strong> — milk, butter, yogurt, cheese, cream, whey, casein.</li>
         <li><strong>Carrots</strong> — known reaction; skip in purées, sauces and finger foods.</li>
-        <li><strong>Bread &amp; toast</strong> — skip for now; serve peanut butter on oat porridge instead.</li>
+        <li><strong>Oats &amp; bread</strong> — skip for now; main carbs are rice and white pasta.</li>
         <li><strong>Honey</strong> — never before 12 months.</li>
         <li><strong>Added salt &amp; sugar</strong> — not suitable for babies.</li>
         <li><strong>Whole nuts, large chunks, whole grapes</strong> — choking risk.</li>
@@ -35,12 +49,12 @@
     <div class="alert-col">
       <h2>Gentle gut rules</h2>
       <ul class="tips-list">
-        <li>Cook everything well. Peel, deseed and mash or finely shred.</li>
-        <li>Iron-rich foods at lunch every day (lentils, then meats from week 5).</li>
-        <li>Continue 500–700 ml/day breast milk or hypoallergenic formula.</li>
-        <li>Offer a few sips of water from an open cup at every meal.</li>
+        <li><strong>Tough first, easy last.</strong> Meal 1 is the heaviest, highest-fibre meal. Each later meal is lighter on the stomach.</li>
         <li><strong>3 days in a row, never alternate.</strong> Every food — fruit, veggie, egg, PB, meat — runs 3 consecutive days before rotating.</li>
         <li><strong>Allergen rhythm:</strong> eggs Mon–Wed · peanut butter Thu–Sat · Sunday rest. Tiles with egg or peanut butter are marked with a dark-green pill.</li>
+        <li>Cook everything well. Peel, deseed and mash or finely shred.</li>
+        <li>Iron-rich foods at Meal 1 every day (lentils, then meats from week 5).</li>
+        <li>Continue 500–700 ml/day breast milk or hypoallergenic formula; sips of water at every meal.</li>
       </ul>
     </div>
   </section>
@@ -68,7 +82,7 @@
 
     const PROFILE = {
       startDate: '2026-05-18',
-      endDate: '2026-07-15',
+      endDate: '2026-07-31',
     };
 
     const ROTATION = 'Eggs Mon–Wed · Peanut butter Thu–Sat · Sun rest';
@@ -79,383 +93,495 @@
       {
         label: 'Week 1',
         stage: '2 meals · fruit, veggie + intro egg & peanut butter',
-        focus: 'Each food runs 3 days in a row — never alternated. Egg at breakfast Mon–Wed, peanut butter at breakfast Thu–Sat, Sunday is a quiet fruit day.',
+        focus: 'Meal 1 = the tough one (veggie). Meal 2 = lighter (egg/PB + fruit). Each food runs 3 days in a row.',
         daily: { meals: '2 meals', texture: 'Smooth purée', portion: '~2–3 tbsp/meal', total: '~60–80 g/day', milk: '600–800 ml milk' },
         days: [
           { date: '2026-05-18', meals: {
-            breakfast: m('Scrambled egg with pear', '1 small egg + 2 tbsp pear', 'Egg'),
-            lunch: m('Sweet potato purée', '2–3 tbsp'),
+            m1: m('Sweet potato purée', '2–3 tbsp'),
+            m2: m('Scrambled egg with pear', '1 small egg + 2 tbsp pear', 'Egg'),
           }},
           { date: '2026-05-19', meals: {
-            breakfast: m('Scrambled egg with pear', '1 small egg + 2 tbsp pear'),
-            lunch: m('Sweet potato purée', '2–3 tbsp'),
+            m1: m('Sweet potato purée', '2–3 tbsp'),
+            m2: m('Scrambled egg with pear', '1 small egg + 2 tbsp pear'),
           }},
           { date: '2026-05-20', meals: {
-            breakfast: m('Scrambled egg with pear', '1 small egg + 2 tbsp pear'),
-            lunch: m('Sweet potato purée', '2–3 tbsp'),
+            m1: m('Sweet potato purée', '2–3 tbsp'),
+            m2: m('Scrambled egg with pear', '1 small egg + 2 tbsp pear'),
           }},
           { date: '2026-05-21', meals: {
-            breakfast: m('Oat porridge with peanut butter + apple', '3 tbsp porridge + 1 tsp smooth PB', 'Peanut butter'),
-            lunch: m('Butternut squash purée', '2–3 tbsp'),
+            m1: m('Butternut squash purée', '2–3 tbsp'),
+            m2: m('Rice porridge with peanut butter + apple', '3 tbsp + 1 tsp smooth PB', 'Peanut butter'),
           }},
           { date: '2026-05-22', meals: {
-            breakfast: m('Oat porridge with peanut butter + apple', '3 tbsp + 1 tsp PB'),
-            lunch: m('Butternut squash purée', '2–3 tbsp'),
+            m1: m('Butternut squash purée', '2–3 tbsp'),
+            m2: m('Rice porridge with peanut butter + apple', '3 tbsp + 1 tsp PB'),
           }},
           { date: '2026-05-23', meals: {
-            breakfast: m('Oat porridge with peanut butter + apple', '3 tbsp + 1 tsp PB'),
-            lunch: m('Butternut squash purée', '2–3 tbsp'),
+            m1: m('Butternut squash purée', '2–3 tbsp'),
+            m2: m('Rice porridge with peanut butter + apple', '3 tbsp + 1 tsp PB'),
           }},
           { date: '2026-05-24', meals: {
-            breakfast: m('Banana mash', '2–3 tbsp'),
-            lunch: m('Pumpkin purée', '2–3 tbsp'),
+            m1: m('Pumpkin purée', '2–3 tbsp'),
+            m2: m('Banana mash', '2–3 tbsp'),
           }},
         ],
       },
       {
         label: 'Week 2',
         stage: '2 meals · add red lentils for iron',
-        focus: 'Same 2-meal rhythm; now red lentils join the veggie at lunch for iron. Eggs Mon–Wed, peanut butter Thu–Sat, Sunday rest.',
+        focus: 'Meal 1 now bundles red lentils with the veggie — high fibre and iron. Meal 2 stays as the lighter egg/PB-and-fruit option.',
         daily: { meals: '2 meals', texture: 'Smooth purée → slightly thicker', portion: '~3 tbsp/meal', total: '~70–90 g/day', milk: '600–800 ml milk' },
         days: [
           { date: '2026-05-25', meals: {
-            breakfast: m('Scrambled egg with banana', '1 small egg + 2 tbsp banana'),
-            lunch: m('Red lentil + pumpkin purée', '3 tbsp', 'Red lentils'),
+            m1: m('Red lentil + pumpkin purée', '3 tbsp', 'Red lentils'),
+            m2: m('Scrambled egg with banana', '1 small egg + 2 tbsp banana'),
           }},
           { date: '2026-05-26', meals: {
-            breakfast: m('Scrambled egg with banana', '1 small egg + 2 tbsp banana'),
-            lunch: m('Red lentil + pumpkin purée', '3 tbsp'),
+            m1: m('Red lentil + pumpkin purée', '3 tbsp'),
+            m2: m('Scrambled egg with banana', '1 small egg + 2 tbsp banana'),
           }},
           { date: '2026-05-27', meals: {
-            breakfast: m('Scrambled egg with mango', '1 small egg + 2 tbsp mango'),
-            lunch: m('Red lentil + parsnip purée', '3 tbsp'),
+            m1: m('Red lentil + parsnip purée', '3 tbsp'),
+            m2: m('Scrambled egg with mango', '1 small egg + 2 tbsp mango'),
           }},
           { date: '2026-05-28', meals: {
-            breakfast: m('Oat porridge with peanut butter + mango', '3 tbsp + 1 tsp PB'),
-            lunch: m('Red lentil + parsnip purée', '3 tbsp'),
+            m1: m('Red lentil + parsnip purée', '3 tbsp'),
+            m2: m('Rice porridge with peanut butter + mango', '3 tbsp + 1 tsp PB'),
           }},
           { date: '2026-05-29', meals: {
-            breakfast: m('Oat porridge with peanut butter + mango', '3 tbsp + 1 tsp PB'),
-            lunch: m('Red lentil + parsnip purée', '3 tbsp'),
+            m1: m('Red lentil + parsnip purée', '3 tbsp'),
+            m2: m('Rice porridge with peanut butter + mango', '3 tbsp + 1 tsp PB'),
           }},
           { date: '2026-05-30', meals: {
-            breakfast: m('Oat porridge with peanut butter + pear', '3 tbsp + 1 tsp PB'),
-            lunch: m('Red lentil + zucchini purée', '3 tbsp'),
+            m1: m('Red lentil + zucchini purée', '3 tbsp'),
+            m2: m('Rice porridge with peanut butter + pear', '3 tbsp + 1 tsp PB'),
           }},
           { date: '2026-05-31', meals: {
-            breakfast: m('Oat porridge with pear', '3 tbsp'),
-            lunch: m('Red lentil + zucchini purée', '3 tbsp'),
+            m1: m('Red lentil + zucchini purée', '3 tbsp'),
+            m2: m('Rice porridge with pear', '3 tbsp'),
           }},
         ],
       },
       {
         label: 'Week 3',
-        stage: '3 meals · thicker textures, fruits return',
-        focus: 'Move smooth → light mash. Add a rice/oat dinner. Eggs Mon–Wed, PB Thu–Sat (3 each, no alternation). Apple and banana return for 3 days each.',
+        stage: '3 meals · add an easy evening meal',
+        focus: 'Meal 3 (evening) is rice porridge with fruit — the gentlest meal of the day. Meal 1 stays heavy with lentils + veggie.',
         daily: { meals: '3 meals', texture: 'Thick purée / light mash', portion: '~3 tbsp/meal', total: '~100–120 g/day', milk: '600–700 ml milk' },
         days: [
           { date: '2026-06-01', meals: {
-            breakfast: m('Scrambled egg with pear', '1 small egg + 2 tbsp pear'),
-            lunch: m('Red lentil + zucchini mash', '3 tbsp'),
-            dinner: m('Rice porridge with pear', '3 tbsp'),
+            m1: m('Red lentil + zucchini mash', '3 tbsp'),
+            m2: m('Scrambled egg with pear', '1 small egg + 2 tbsp pear'),
+            m3: m('Rice porridge with pear', '3 tbsp'),
           }},
           { date: '2026-06-02', meals: {
-            breakfast: m('Scrambled egg with apple', '1 small egg + 2 tbsp apple'),
-            lunch: m('Red lentil + broccoli mash', '3 tbsp'),
-            dinner: m('Rice porridge with apple', '3 tbsp'),
+            m1: m('Red lentil + broccoli mash', '3 tbsp'),
+            m2: m('Scrambled egg with apple', '1 small egg + 2 tbsp apple'),
+            m3: m('Rice porridge with apple', '3 tbsp'),
           }},
           { date: '2026-06-03', meals: {
-            breakfast: m('Scrambled egg with apple', '1 small egg + 2 tbsp apple'),
-            lunch: m('Red lentil + broccoli mash', '3 tbsp'),
-            dinner: m('Rice porridge with apple', '3 tbsp'),
+            m1: m('Red lentil + broccoli mash', '3 tbsp'),
+            m2: m('Scrambled egg with apple', '1 small egg + 2 tbsp apple'),
+            m3: m('Rice porridge with apple', '3 tbsp'),
           }},
           { date: '2026-06-04', meals: {
-            breakfast: m('Oat porridge with peanut butter + apple', '3 tbsp + 1 tsp PB'),
-            lunch: m('Red lentil + broccoli mash', '3 tbsp'),
-            dinner: m('Oat porridge with apple', '3 tbsp'),
+            m1: m('Red lentil + broccoli mash', '3 tbsp'),
+            m2: m('Rice porridge with peanut butter + apple', '3 tbsp + 1 tsp PB'),
+            m3: m('Rice porridge with apple', '3 tbsp'),
           }},
           { date: '2026-06-05', meals: {
-            breakfast: m('Oat porridge with peanut butter + banana', '3 tbsp + 1 tsp PB'),
-            lunch: m('Red lentil + cauliflower mash', '3 tbsp'),
-            dinner: m('Oat porridge with banana', '3 tbsp'),
+            m1: m('Red lentil + cauliflower mash', '3 tbsp'),
+            m2: m('Rice porridge with peanut butter + banana', '3 tbsp + 1 tsp PB'),
+            m3: m('Rice porridge with banana', '3 tbsp'),
           }},
           { date: '2026-06-06', meals: {
-            breakfast: m('Oat porridge with peanut butter + banana', '3 tbsp + 1 tsp PB'),
-            lunch: m('Red lentil + cauliflower mash', '3 tbsp'),
-            dinner: m('Oat porridge with banana', '3 tbsp'),
+            m1: m('Red lentil + cauliflower mash', '3 tbsp'),
+            m2: m('Rice porridge with peanut butter + banana', '3 tbsp + 1 tsp PB'),
+            m3: m('Rice porridge with banana', '3 tbsp'),
           }},
           { date: '2026-06-07', meals: {
-            breakfast: m('Oat porridge with banana', '3 tbsp'),
-            lunch: m('Red lentil + cauliflower mash', '3 tbsp'),
-            dinner: m('Oat porridge with banana', '3 tbsp'),
+            m1: m('Red lentil + cauliflower mash', '3 tbsp'),
+            m2: m('Banana mash', '2–3 tbsp'),
+            m3: m('Rice porridge with banana', '3 tbsp'),
           }},
         ],
       },
       {
         label: 'Week 4',
-        stage: '3 meals · introduce pasta',
-        focus: 'Tiny pasta shapes (stelline, orzo) cooked very soft — 3 days in a row, then back to lentil mash for 3 days. No new meat yet. Blueberry introduced Sunday.',
+        stage: '3 meals · introduce white pasta',
+        focus: 'Tiny white pasta shapes appear at Meal 1 (Mon–Wed) — still high-fibre with lentils. Blueberry introduced Sunday as a soft fruit mash.',
         daily: { meals: '3 meals', texture: 'Light mash with small soft lumps', portion: '~3–4 tbsp/meal', total: '~120–140 g/day', milk: '500–700 ml milk' },
         days: [
           { date: '2026-06-08', meals: {
-            breakfast: m('Scrambled egg with mango', '1 small egg + 3 tbsp mango'),
-            lunch: m('Tiny pasta with red lentil + pea sauce', '4 tbsp', 'Pasta'),
-            dinner: m('Rice porridge with mango', '3 tbsp'),
+            m1: m('Tiny white pasta with red lentil + pea sauce', '4 tbsp', 'Pasta'),
+            m2: m('Scrambled egg with mango', '1 small egg + 3 tbsp mango'),
+            m3: m('Rice porridge with mango', '3 tbsp'),
           }},
           { date: '2026-06-09', meals: {
-            breakfast: m('Scrambled egg with mango', '1 small egg + 3 tbsp mango'),
-            lunch: m('Tiny pasta with red lentil + pea sauce', '4 tbsp'),
-            dinner: m('Rice porridge with mango', '3 tbsp'),
+            m1: m('Tiny white pasta with red lentil + pea sauce', '4 tbsp'),
+            m2: m('Scrambled egg with mango', '1 small egg + 3 tbsp mango'),
+            m3: m('Rice porridge with mango', '3 tbsp'),
           }},
           { date: '2026-06-10', meals: {
-            breakfast: m('Scrambled egg with mango', '1 small egg + 3 tbsp mango'),
-            lunch: m('Tiny pasta with red lentil + pea sauce', '4 tbsp'),
-            dinner: m('Rice porridge with mango', '3 tbsp'),
+            m1: m('Tiny white pasta with red lentil + pea sauce', '4 tbsp'),
+            m2: m('Scrambled egg with mango', '1 small egg + 3 tbsp mango'),
+            m3: m('Rice porridge with mango', '3 tbsp'),
           }},
           { date: '2026-06-11', meals: {
-            breakfast: m('Oat porridge with peanut butter + pear', '3–4 tbsp + 1–2 tsp PB'),
-            lunch: m('Red lentil + sweet potato mash', '4 tbsp'),
-            dinner: m('Oat porridge with pear', '3 tbsp'),
+            m1: m('Red lentil + sweet potato mash', '4 tbsp'),
+            m2: m('Rice porridge with peanut butter + pear', '3–4 tbsp + 1–2 tsp PB'),
+            m3: m('Rice porridge with pear', '3 tbsp'),
           }},
           { date: '2026-06-12', meals: {
-            breakfast: m('Oat porridge with peanut butter + pear', '3–4 tbsp + 1–2 tsp PB'),
-            lunch: m('Red lentil + sweet potato mash', '4 tbsp'),
-            dinner: m('Oat porridge with pear', '3 tbsp'),
+            m1: m('Red lentil + sweet potato mash', '4 tbsp'),
+            m2: m('Rice porridge with peanut butter + pear', '3–4 tbsp + 1–2 tsp PB'),
+            m3: m('Rice porridge with pear', '3 tbsp'),
           }},
           { date: '2026-06-13', meals: {
-            breakfast: m('Oat porridge with peanut butter + pear', '3–4 tbsp + 1–2 tsp PB'),
-            lunch: m('Red lentil + sweet potato mash', '4 tbsp'),
-            dinner: m('Oat porridge with pear', '3 tbsp'),
+            m1: m('Red lentil + sweet potato mash', '4 tbsp'),
+            m2: m('Rice porridge with peanut butter + pear', '3–4 tbsp + 1–2 tsp PB'),
+            m3: m('Rice porridge with pear', '3 tbsp'),
           }},
           { date: '2026-06-14', meals: {
-            breakfast: m('Oat porridge with blueberry mash', '3–4 tbsp', 'Blueberry'),
-            lunch: m('Red lentil + butternut squash mash', '4 tbsp'),
-            dinner: m('Oat porridge with blueberry', '3 tbsp'),
+            m1: m('Red lentil + butternut squash mash', '4 tbsp'),
+            m2: m('Blueberry mash', '2–3 tbsp', 'Blueberry'),
+            m3: m('Rice porridge with blueberry', '3 tbsp'),
           }},
         ],
       },
       {
         label: 'Week 5',
         stage: '3 meals · first meat — chicken',
-        focus: 'Chicken at lunch all week — pureed or finely shredded. Pasta returns Wed–Fri for 3 days. Peach introduced Saturday.',
+        focus: 'Chicken now leads Meal 1 (pureed or finely shredded). Pasta returns at Meal 1 Wed–Fri. Peach introduced Saturday.',
         daily: { meals: '3 meals', texture: 'Mash with soft lumps', portion: '~4 tbsp/meal', total: '~140–160 g/day', milk: '500–700 ml milk' },
         days: [
           { date: '2026-06-15', meals: {
-            breakfast: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
-            lunch: m('Chicken + butternut squash mash', '4 tbsp', 'Chicken'),
-            dinner: m('Rice porridge with blueberry', '4 tbsp'),
+            m1: m('Chicken + butternut squash mash', '4 tbsp', 'Chicken'),
+            m2: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
+            m3: m('Rice porridge with blueberry', '4 tbsp'),
           }},
           { date: '2026-06-16', meals: {
-            breakfast: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
-            lunch: m('Chicken + butternut squash mash', '4 tbsp'),
-            dinner: m('Rice porridge with blueberry', '4 tbsp'),
+            m1: m('Chicken + butternut squash mash', '4 tbsp'),
+            m2: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
+            m3: m('Rice porridge with blueberry', '4 tbsp'),
           }},
           { date: '2026-06-17', meals: {
-            breakfast: m('Scrambled egg with apple', '1 small egg + 3 tbsp apple'),
-            lunch: m('Tiny pasta with chicken + pumpkin', '4 tbsp'),
-            dinner: m('Rice porridge with apple', '4 tbsp'),
+            m1: m('Tiny white pasta with chicken + pumpkin', '4 tbsp'),
+            m2: m('Scrambled egg with apple', '1 small egg + 3 tbsp apple'),
+            m3: m('Rice porridge with apple', '4 tbsp'),
           }},
           { date: '2026-06-18', meals: {
-            breakfast: m('Oat porridge with peanut butter + apple', '4 tbsp + 1–2 tsp PB'),
-            lunch: m('Tiny pasta with chicken + pumpkin', '4 tbsp'),
-            dinner: m('Oat porridge with apple', '4 tbsp'),
+            m1: m('Tiny white pasta with chicken + pumpkin', '4 tbsp'),
+            m2: m('Rice porridge with peanut butter + apple', '4 tbsp + 1–2 tsp PB'),
+            m3: m('Rice porridge with apple', '4 tbsp'),
           }},
           { date: '2026-06-19', meals: {
-            breakfast: m('Oat porridge with peanut butter + apple', '4 tbsp + 1–2 tsp PB'),
-            lunch: m('Tiny pasta with chicken + pumpkin', '4 tbsp'),
-            dinner: m('Oat porridge with apple', '4 tbsp'),
+            m1: m('Tiny white pasta with chicken + pumpkin', '4 tbsp'),
+            m2: m('Rice porridge with peanut butter + apple', '4 tbsp + 1–2 tsp PB'),
+            m3: m('Rice porridge with apple', '4 tbsp'),
           }},
           { date: '2026-06-20', meals: {
-            breakfast: m('Oat porridge with peanut butter + peach', '4 tbsp + 1–2 tsp PB', 'Peach'),
-            lunch: m('Chicken + parsnip mash', '4 tbsp'),
-            dinner: m('Oat porridge with peach', '4 tbsp'),
+            m1: m('Chicken + parsnip mash', '4 tbsp'),
+            m2: m('Rice porridge with peanut butter + peach', '4 tbsp + 1–2 tsp PB', 'Peach'),
+            m3: m('Rice porridge with peach', '4 tbsp'),
           }},
           { date: '2026-06-21', meals: {
-            breakfast: m('Oat porridge with peach', '4 tbsp'),
-            lunch: m('Red lentil + parsnip mash', '4 tbsp'),
-            dinner: m('Oat porridge with peach', '4 tbsp'),
+            m1: m('Red lentil + parsnip mash', '4 tbsp'),
+            m2: m('Peach mash', '3 tbsp'),
+            m3: m('Rice porridge with peach', '4 tbsp'),
           }},
         ],
       },
       {
         label: 'Week 6',
-        stage: '3 meals + 1 snack · first fish (cod, salmon)',
-        focus: 'Add a small afternoon fruit snack. Cod 3 days Mon–Wed, salmon 3 days Thu–Sat — no alternating. Sunday goes back to lentils.',
-        daily: { meals: '3 meals + 1 snack', texture: 'Soft chunks · finger foods begin', portion: '~4–5 tbsp/meal · 2 tbsp snack', total: '~150–170 g/day', milk: '500–600 ml milk' },
+        stage: '4 meals · first fish + afternoon snack',
+        focus: 'A light afternoon fruit snack joins as Meal 3. Cod 3 days, then salmon 3 days. Meal 1 stays heavy, Meal 4 stays easy.',
+        daily: { meals: '4 meals', texture: 'Soft chunks · finger foods begin', portion: '~4–5 tbsp/meal · 2 tbsp snack', total: '~150–170 g/day', milk: '500–600 ml milk' },
         days: [
           { date: '2026-06-22', meals: {
-            breakfast: m('Scrambled egg with peach', '1 small egg + 3 tbsp peach'),
-            lunch: m('Cod + parsnip mash', '4 tbsp', 'Cod'),
-            snack: m('Peach mash', '2 tbsp', 'Snack added'),
-            dinner: m('Rice porridge with peach', '4 tbsp'),
+            m1: m('Cod + parsnip mash', '4 tbsp', 'Cod'),
+            m2: m('Scrambled egg with peach', '1 small egg + 3 tbsp peach'),
+            m3: m('Peach mash', '2 tbsp', 'Snack added'),
+            m4: m('Rice porridge with peach', '4 tbsp'),
           }},
           { date: '2026-06-23', meals: {
-            breakfast: m('Scrambled egg with banana', '1 small egg + 3 tbsp banana'),
-            lunch: m('Cod + zucchini mash', '4 tbsp'),
-            snack: m('Banana mash', '2 tbsp'),
-            dinner: m('Rice porridge with banana', '4 tbsp'),
+            m1: m('Cod + zucchini mash', '4 tbsp'),
+            m2: m('Scrambled egg with banana', '1 small egg + 3 tbsp banana'),
+            m3: m('Banana mash', '2 tbsp'),
+            m4: m('Rice porridge with banana', '4 tbsp'),
           }},
           { date: '2026-06-24', meals: {
-            breakfast: m('Scrambled egg with banana', '1 small egg + 3 tbsp banana'),
-            lunch: m('Cod + zucchini mash', '4 tbsp'),
-            snack: m('Banana mash', '2 tbsp'),
-            dinner: m('Rice porridge with banana', '4 tbsp'),
+            m1: m('Cod + zucchini mash', '4 tbsp'),
+            m2: m('Scrambled egg with banana', '1 small egg + 3 tbsp banana'),
+            m3: m('Banana mash', '2 tbsp'),
+            m4: m('Rice porridge with banana', '4 tbsp'),
           }},
           { date: '2026-06-25', meals: {
-            breakfast: m('Oat porridge with peanut butter + banana', '4 tbsp + 2 tsp PB'),
-            lunch: m('Salmon + zucchini mash', '4 tbsp', 'Salmon'),
-            snack: m('Banana mash', '2 tbsp'),
-            dinner: m('Oat porridge with banana', '4 tbsp'),
+            m1: m('Salmon + zucchini mash', '4 tbsp', 'Salmon'),
+            m2: m('Rice porridge with peanut butter + banana', '4 tbsp + 2 tsp PB'),
+            m3: m('Banana mash', '2 tbsp'),
+            m4: m('Rice porridge with banana', '4 tbsp'),
           }},
           { date: '2026-06-26', meals: {
-            breakfast: m('Oat porridge with peanut butter + mango', '4 tbsp + 2 tsp PB'),
-            lunch: m('Salmon + broccoli mash', '4 tbsp'),
-            snack: m('Mango', '2 tbsp'),
-            dinner: m('Oat porridge with mango', '4 tbsp'),
+            m1: m('Salmon + broccoli mash', '4 tbsp'),
+            m2: m('Rice porridge with peanut butter + mango', '4 tbsp + 2 tsp PB'),
+            m3: m('Mango', '2 tbsp'),
+            m4: m('Rice porridge with mango', '4 tbsp'),
           }},
           { date: '2026-06-27', meals: {
-            breakfast: m('Oat porridge with peanut butter + mango', '4 tbsp + 2 tsp PB'),
-            lunch: m('Salmon + broccoli mash', '4 tbsp'),
-            snack: m('Mango', '2 tbsp'),
-            dinner: m('Oat porridge with mango', '4 tbsp'),
+            m1: m('Salmon + broccoli mash', '4 tbsp'),
+            m2: m('Rice porridge with peanut butter + mango', '4 tbsp + 2 tsp PB'),
+            m3: m('Mango', '2 tbsp'),
+            m4: m('Rice porridge with mango', '4 tbsp'),
           }},
           { date: '2026-06-28', meals: {
-            breakfast: m('Oat porridge with mango', '4 tbsp'),
-            lunch: m('Red lentil + broccoli mash', '5 tbsp'),
-            snack: m('Mango', '2 tbsp'),
-            dinner: m('Oat porridge with mango', '4 tbsp'),
+            m1: m('Red lentil + broccoli mash', '5 tbsp'),
+            m2: m('Mango mash', '3 tbsp'),
+            m3: m('Mango', '2 tbsp'),
+            m4: m('Rice porridge with mango', '4 tbsp'),
           }},
         ],
       },
       {
         label: 'Week 7',
-        stage: '3 meals + snack · introduce beef',
-        focus: 'Slow-cooked beef Mon–Wed (3 days, intro). Salmon returns Thu–Sat (3 days). Blueberry and pear cycle back.',
-        daily: { meals: '3 meals + 1 snack', texture: 'Small soft pieces', portion: '~5 tbsp/meal · 3 tbsp snack', total: '~170–190 g/day', milk: '500–600 ml milk' },
+        stage: '4 meals · introduce beef',
+        focus: 'Slow-cooked beef leads Meal 1 Mon–Wed. Salmon returns Thu–Sat. Snack and easy rice porridge keep the afternoon and evening gentle.',
+        daily: { meals: '4 meals', texture: 'Small soft pieces', portion: '~5 tbsp/meal · 3 tbsp snack', total: '~170–190 g/day', milk: '500–600 ml milk' },
         days: [
           { date: '2026-06-29', meals: {
-            breakfast: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
-            lunch: m('Beef + cauliflower mash', '5 tbsp', 'Beef'),
-            snack: m('Blueberry mash', '3 tbsp'),
-            dinner: m('Rice porridge with blueberry', '5 tbsp'),
+            m1: m('Beef + cauliflower mash', '5 tbsp', 'Beef'),
+            m2: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
+            m3: m('Blueberry mash', '3 tbsp'),
+            m4: m('Rice porridge with blueberry', '5 tbsp'),
           }},
           { date: '2026-06-30', meals: {
-            breakfast: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
-            lunch: m('Beef + cauliflower mash', '5 tbsp'),
-            snack: m('Blueberry mash', '3 tbsp'),
-            dinner: m('Rice porridge with blueberry', '5 tbsp'),
+            m1: m('Beef + cauliflower mash', '5 tbsp'),
+            m2: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
+            m3: m('Blueberry mash', '3 tbsp'),
+            m4: m('Rice porridge with blueberry', '5 tbsp'),
           }},
           { date: '2026-07-01', meals: {
-            breakfast: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
-            lunch: m('Beef + cauliflower mash', '5 tbsp'),
-            snack: m('Blueberry mash', '3 tbsp'),
-            dinner: m('Rice porridge with blueberry', '5 tbsp'),
+            m1: m('Beef + cauliflower mash', '5 tbsp'),
+            m2: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
+            m3: m('Blueberry mash', '3 tbsp'),
+            m4: m('Rice porridge with blueberry', '5 tbsp'),
           }},
           { date: '2026-07-02', meals: {
-            breakfast: m('Oat porridge with peanut butter + pear', '4 tbsp + 2 tsp PB'),
-            lunch: m('Salmon + pea mash', '5 tbsp'),
-            snack: m('Pear', '3 tbsp'),
-            dinner: m('Oat porridge with pear', '5 tbsp'),
+            m1: m('Salmon + pea mash', '5 tbsp'),
+            m2: m('Rice porridge with peanut butter + pear', '4 tbsp + 2 tsp PB'),
+            m3: m('Pear', '3 tbsp'),
+            m4: m('Rice porridge with pear', '5 tbsp'),
           }},
           { date: '2026-07-03', meals: {
-            breakfast: m('Oat porridge with peanut butter + pear', '4 tbsp + 2 tsp PB'),
-            lunch: m('Salmon + pea mash', '5 tbsp'),
-            snack: m('Pear', '3 tbsp'),
-            dinner: m('Oat porridge with pear', '5 tbsp'),
+            m1: m('Salmon + pea mash', '5 tbsp'),
+            m2: m('Rice porridge with peanut butter + pear', '4 tbsp + 2 tsp PB'),
+            m3: m('Pear', '3 tbsp'),
+            m4: m('Rice porridge with pear', '5 tbsp'),
           }},
           { date: '2026-07-04', meals: {
-            breakfast: m('Oat porridge with peanut butter + pear', '4 tbsp + 2 tsp PB'),
-            lunch: m('Salmon + pea mash', '5 tbsp'),
-            snack: m('Pear', '3 tbsp'),
-            dinner: m('Oat porridge with pear', '5 tbsp'),
+            m1: m('Salmon + pea mash', '5 tbsp'),
+            m2: m('Rice porridge with peanut butter + pear', '4 tbsp + 2 tsp PB'),
+            m3: m('Pear', '3 tbsp'),
+            m4: m('Rice porridge with pear', '5 tbsp'),
           }},
           { date: '2026-07-05', meals: {
-            breakfast: m('Oat porridge with apple', '4 tbsp'),
-            lunch: m('Red lentil + sweet potato mash', '5 tbsp'),
-            snack: m('Apple mash', '3 tbsp'),
-            dinner: m('Oat porridge with apple', '5 tbsp'),
+            m1: m('Red lentil + sweet potato mash', '5 tbsp'),
+            m2: m('Apple mash', '3 tbsp'),
+            m3: m('Apple', '3 tbsp'),
+            m4: m('Rice porridge with apple', '5 tbsp'),
           }},
         ],
       },
       {
         label: 'Week 8',
-        stage: '3 meals + snack · introduce lamb',
-        focus: 'Slow-cooked lamb Mon–Wed (3 days, intro). Chicken returns Thu–Sat (3 days). Apple, peach and banana cycle back.',
-        daily: { meals: '3 meals + 1 snack', texture: 'Small soft pieces · family-style', portion: '~5–6 tbsp/meal · 3 tbsp snack', total: '~190–210 g/day', milk: '500–600 ml milk' },
+        stage: '4 meals · introduce lamb',
+        focus: 'Slow-cooked lamb Mon–Wed. Chicken returns Thu–Sat. Apple, peach and banana cycle back as the fruit base.',
+        daily: { meals: '4 meals', texture: 'Small soft pieces · family-style', portion: '~5–6 tbsp/meal · 3 tbsp snack', total: '~190–210 g/day', milk: '500–600 ml milk' },
         days: [
           { date: '2026-07-06', meals: {
-            breakfast: m('Scrambled egg with apple', '1 small egg + 3 tbsp apple'),
-            lunch: m('Lamb + sweet potato mash', '6 tbsp', 'Lamb'),
-            snack: m('Apple', '3 tbsp'),
-            dinner: m('Rice porridge with apple', '5 tbsp'),
+            m1: m('Lamb + sweet potato mash', '6 tbsp', 'Lamb'),
+            m2: m('Scrambled egg with apple', '1 small egg + 3 tbsp apple'),
+            m3: m('Apple', '3 tbsp'),
+            m4: m('Rice porridge with apple', '5 tbsp'),
           }},
           { date: '2026-07-07', meals: {
-            breakfast: m('Scrambled egg with apple', '1 small egg + 3 tbsp apple'),
-            lunch: m('Lamb + sweet potato mash', '6 tbsp'),
-            snack: m('Apple', '3 tbsp'),
-            dinner: m('Rice porridge with apple', '5 tbsp'),
+            m1: m('Lamb + sweet potato mash', '6 tbsp'),
+            m2: m('Scrambled egg with apple', '1 small egg + 3 tbsp apple'),
+            m3: m('Apple', '3 tbsp'),
+            m4: m('Rice porridge with apple', '5 tbsp'),
           }},
           { date: '2026-07-08', meals: {
-            breakfast: m('Scrambled egg with peach', '1 small egg + 3 tbsp peach'),
-            lunch: m('Lamb + butternut squash mash', '6 tbsp'),
-            snack: m('Peach', '3 tbsp'),
-            dinner: m('Rice porridge with peach', '5 tbsp'),
+            m1: m('Lamb + butternut squash mash', '6 tbsp'),
+            m2: m('Scrambled egg with peach', '1 small egg + 3 tbsp peach'),
+            m3: m('Peach', '3 tbsp'),
+            m4: m('Rice porridge with peach', '5 tbsp'),
           }},
           { date: '2026-07-09', meals: {
-            breakfast: m('Oat porridge with peanut butter + peach', '5 tbsp + 2 tsp PB'),
-            lunch: m('Chicken + butternut squash mash', '6 tbsp'),
-            snack: m('Peach', '3 tbsp'),
-            dinner: m('Oat porridge with peach', '5 tbsp'),
+            m1: m('Chicken + butternut squash mash', '6 tbsp'),
+            m2: m('Rice porridge with peanut butter + peach', '5 tbsp + 2 tsp PB'),
+            m3: m('Peach', '3 tbsp'),
+            m4: m('Rice porridge with peach', '5 tbsp'),
           }},
           { date: '2026-07-10', meals: {
-            breakfast: m('Oat porridge with peanut butter + peach', '5 tbsp + 2 tsp PB'),
-            lunch: m('Chicken + butternut squash mash', '6 tbsp'),
-            snack: m('Peach', '3 tbsp'),
-            dinner: m('Oat porridge with peach', '5 tbsp'),
+            m1: m('Chicken + butternut squash mash', '6 tbsp'),
+            m2: m('Rice porridge with peanut butter + peach', '5 tbsp + 2 tsp PB'),
+            m3: m('Peach', '3 tbsp'),
+            m4: m('Rice porridge with peach', '5 tbsp'),
           }},
           { date: '2026-07-11', meals: {
-            breakfast: m('Oat porridge with peanut butter + banana', '5 tbsp + 2 tsp PB'),
-            lunch: m('Chicken + pumpkin mash', '6 tbsp'),
-            snack: m('Banana', '3 tbsp'),
-            dinner: m('Oat porridge with banana', '5 tbsp'),
+            m1: m('Chicken + pumpkin mash', '6 tbsp'),
+            m2: m('Rice porridge with peanut butter + banana', '5 tbsp + 2 tsp PB'),
+            m3: m('Banana', '3 tbsp'),
+            m4: m('Rice porridge with banana', '5 tbsp'),
           }},
           { date: '2026-07-12', meals: {
-            breakfast: m('Oat porridge with banana', '5 tbsp'),
-            lunch: m('Red lentil + pumpkin mash', '6 tbsp'),
-            snack: m('Banana', '3 tbsp'),
-            dinner: m('Oat porridge with banana', '5 tbsp'),
+            m1: m('Red lentil + pumpkin mash', '6 tbsp'),
+            m2: m('Banana mash', '3 tbsp'),
+            m3: m('Banana', '3 tbsp'),
+            m4: m('Rice porridge with banana', '5 tbsp'),
           }},
         ],
       },
       {
         label: 'Week 9',
-        stage: '3 meals + snack · approaching 8 months',
-        focus: 'Three balanced meals plus a snack. Beef returns for all 3 days — single protein, no alternation. Mango and broccoli for 2 of 3 days.',
-        daily: { meals: '3 meals + 1 snack', texture: 'Soft chunks · family-style', portion: '~6 tbsp/meal · 3 tbsp snack', total: '~200–220 g/day', milk: '500–600 ml milk' },
+        stage: '4 meals · 8 months · beef and chicken cycle back',
+        focus: 'Beef Mon–Wed, chicken Thu–Sat (both returning). Bigger portions, more recognisable family-style textures.',
+        daily: { meals: '4 meals', texture: 'Soft chunks · family-style', portion: '~6 tbsp/meal · 3 tbsp snack', total: '~200–220 g/day', milk: '500–600 ml milk' },
         days: [
           { date: '2026-07-13', meals: {
-            breakfast: m('Scrambled egg with banana', '1 small egg + 3 tbsp banana'),
-            lunch: m('Beef + pumpkin mash', '6 tbsp'),
-            snack: m('Banana', '3 tbsp'),
-            dinner: m('Rice porridge with banana', '6 tbsp'),
+            m1: m('Beef + pumpkin mash', '6 tbsp'),
+            m2: m('Scrambled egg with banana', '1 small egg + 3 tbsp banana'),
+            m3: m('Banana', '3 tbsp'),
+            m4: m('Rice porridge with banana', '6 tbsp'),
           }},
           { date: '2026-07-14', meals: {
-            breakfast: m('Scrambled egg with mango', '1 small egg + 3 tbsp mango'),
-            lunch: m('Beef + broccoli mash', '6 tbsp'),
-            snack: m('Mango', '3 tbsp'),
-            dinner: m('Rice porridge with mango', '6 tbsp'),
+            m1: m('Beef + broccoli mash', '6 tbsp'),
+            m2: m('Scrambled egg with mango', '1 small egg + 3 tbsp mango'),
+            m3: m('Mango', '3 tbsp'),
+            m4: m('Rice porridge with mango', '6 tbsp'),
           }},
           { date: '2026-07-15', meals: {
-            breakfast: m('Scrambled egg with mango', '1 small egg + 3 tbsp mango'),
-            lunch: m('Beef + broccoli mash', '6 tbsp'),
-            snack: m('Mango', '3 tbsp'),
-            dinner: m('Rice porridge with mango', '6 tbsp'),
+            m1: m('Beef + broccoli mash', '6 tbsp'),
+            m2: m('Scrambled egg with mango', '1 small egg + 3 tbsp mango'),
+            m3: m('Mango', '3 tbsp'),
+            m4: m('Rice porridge with mango', '6 tbsp'),
+          }},
+          { date: '2026-07-16', meals: {
+            m1: m('Chicken + broccoli mash', '6 tbsp'),
+            m2: m('Rice porridge with peanut butter + mango', '5 tbsp + 2 tsp PB'),
+            m3: m('Mango', '3 tbsp'),
+            m4: m('Rice porridge with mango', '6 tbsp'),
+          }},
+          { date: '2026-07-17', meals: {
+            m1: m('Chicken + zucchini mash', '6 tbsp'),
+            m2: m('Rice porridge with peanut butter + pear', '5 tbsp + 2 tsp PB'),
+            m3: m('Pear', '3 tbsp'),
+            m4: m('Rice porridge with pear', '6 tbsp'),
+          }},
+          { date: '2026-07-18', meals: {
+            m1: m('Chicken + zucchini mash', '6 tbsp'),
+            m2: m('Rice porridge with peanut butter + pear', '5 tbsp + 2 tsp PB'),
+            m3: m('Pear', '3 tbsp'),
+            m4: m('Rice porridge with pear', '6 tbsp'),
+          }},
+          { date: '2026-07-19', meals: {
+            m1: m('Red lentil + zucchini mash', '6 tbsp'),
+            m2: m('Pear mash', '3 tbsp'),
+            m3: m('Pear', '3 tbsp'),
+            m4: m('Rice porridge with pear', '6 tbsp'),
+          }},
+        ],
+      },
+      {
+        label: 'Week 10',
+        stage: '4 meals · 8+ months · lamb & salmon cycle back',
+        focus: 'Lamb Mon–Wed, salmon Thu–Sat. Apple and banana cycle back as the dominant fruits.',
+        daily: { meals: '4 meals', texture: 'Soft chunks · family-style', portion: '~6 tbsp/meal · 3 tbsp snack', total: '~210–230 g/day', milk: '450–550 ml milk' },
+        days: [
+          { date: '2026-07-20', meals: {
+            m1: m('Lamb + broccoli mash', '6 tbsp'),
+            m2: m('Scrambled egg with apple', '1 small egg + 3 tbsp apple'),
+            m3: m('Apple', '3 tbsp'),
+            m4: m('Rice porridge with apple', '6 tbsp'),
+          }},
+          { date: '2026-07-21', meals: {
+            m1: m('Lamb + broccoli mash', '6 tbsp'),
+            m2: m('Scrambled egg with apple', '1 small egg + 3 tbsp apple'),
+            m3: m('Apple', '3 tbsp'),
+            m4: m('Rice porridge with apple', '6 tbsp'),
+          }},
+          { date: '2026-07-22', meals: {
+            m1: m('Lamb + broccoli mash', '6 tbsp'),
+            m2: m('Scrambled egg with apple', '1 small egg + 3 tbsp apple'),
+            m3: m('Apple', '3 tbsp'),
+            m4: m('Rice porridge with apple', '6 tbsp'),
+          }},
+          { date: '2026-07-23', meals: {
+            m1: m('Salmon + cauliflower mash', '6 tbsp'),
+            m2: m('Rice porridge with peanut butter + banana', '5 tbsp + 2 tsp PB'),
+            m3: m('Banana', '3 tbsp'),
+            m4: m('Rice porridge with banana', '6 tbsp'),
+          }},
+          { date: '2026-07-24', meals: {
+            m1: m('Salmon + cauliflower mash', '6 tbsp'),
+            m2: m('Rice porridge with peanut butter + banana', '5 tbsp + 2 tsp PB'),
+            m3: m('Banana', '3 tbsp'),
+            m4: m('Rice porridge with banana', '6 tbsp'),
+          }},
+          { date: '2026-07-25', meals: {
+            m1: m('Salmon + cauliflower mash', '6 tbsp'),
+            m2: m('Rice porridge with peanut butter + banana', '5 tbsp + 2 tsp PB'),
+            m3: m('Banana', '3 tbsp'),
+            m4: m('Rice porridge with banana', '6 tbsp'),
+          }},
+          { date: '2026-07-26', meals: {
+            m1: m('Red lentil + pea mash', '6 tbsp'),
+            m2: m('Mango mash', '3 tbsp'),
+            m3: m('Mango', '3 tbsp'),
+            m4: m('Rice porridge with mango', '6 tbsp'),
+          }},
+        ],
+      },
+      {
+        label: 'Week 11',
+        stage: '4 meals · 8+ months · cod cycles back',
+        focus: 'Cod for the whole working week (Mon–Fri, 5 consecutive days). Eggs every breakfast — no peanut butter this short week.',
+        daily: { meals: '4 meals', texture: 'Soft chunks · family-style', portion: '~6 tbsp/meal · 3 tbsp snack', total: '~210–230 g/day', milk: '450–550 ml milk' },
+        days: [
+          { date: '2026-07-27', meals: {
+            m1: m('Cod + pea mash', '6 tbsp'),
+            m2: m('Scrambled egg with mango', '1 small egg + 3 tbsp mango'),
+            m3: m('Mango', '3 tbsp'),
+            m4: m('Rice porridge with mango', '6 tbsp'),
+          }},
+          { date: '2026-07-28', meals: {
+            m1: m('Cod + pea mash', '6 tbsp'),
+            m2: m('Scrambled egg with mango', '1 small egg + 3 tbsp mango'),
+            m3: m('Mango', '3 tbsp'),
+            m4: m('Rice porridge with mango', '6 tbsp'),
+          }},
+          { date: '2026-07-29', meals: {
+            m1: m('Cod + sweet potato mash', '6 tbsp'),
+            m2: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
+            m3: m('Blueberry mash', '3 tbsp'),
+            m4: m('Rice porridge with blueberry', '6 tbsp'),
+          }},
+          { date: '2026-07-30', meals: {
+            m1: m('Cod + sweet potato mash', '6 tbsp'),
+            m2: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
+            m3: m('Blueberry mash', '3 tbsp'),
+            m4: m('Rice porridge with blueberry', '6 tbsp'),
+          }},
+          { date: '2026-07-31', meals: {
+            m1: m('Cod + sweet potato mash', '6 tbsp'),
+            m2: m('Scrambled egg with blueberry', '1 small egg + 3 tbsp blueberry'),
+            m3: m('Blueberry mash', '3 tbsp'),
+            m4: m('Rice porridge with blueberry', '6 tbsp'),
           }},
         ],
       },
     ];
 
-    const STORAGE_KEY = 'gooseFoodTracker.v1';
+    const STORAGE_KEY = 'gooseFoodTracker.v2';
 
     const parseDate = (iso) => {
       const [y, mo, d] = iso.split('-').map(Number);
@@ -507,10 +633,10 @@
     };
 
     const MEAL_SLOTS = [
-      { key: 'breakfast', label: 'Breakfast', code: 'b' },
-      { key: 'lunch', label: 'Lunch', code: 'l' },
-      { key: 'snack', label: 'Snack', code: 's' },
-      { key: 'dinner', label: 'Dinner', code: 'd' },
+      { key: 'm1', label: 'Meal 1', code: 'm1' },
+      { key: 'm2', label: 'Meal 2', code: 'm2' },
+      { key: 'm3', label: 'Meal 3', code: 'm3' },
+      { key: 'm4', label: 'Meal 4', code: 'm4' },
     ];
 
     const detectAllergens = (text) => {
@@ -601,7 +727,7 @@
     };
 
     const KNOWN_FOODS = [
-      'oats', 'rice', 'pasta',
+      'rice', 'white pasta',
       'apple', 'pear', 'banana', 'mango', 'peach', 'blueberry', 'avocado',
       'sweet potato', 'butternut squash', 'pumpkin', 'parsnip', 'zucchini',
       'broccoli', 'cauliflower', 'peas',
@@ -622,7 +748,7 @@
               'eggs': 'egg',
               'smooth peanut butter': 'peanut butter',
               'peas': 'pea',
-              'oats': 'oat',
+              'white pasta': 'pasta',
             }[k] || k;
             if (t.includes(needle)) present.add(k);
           });
