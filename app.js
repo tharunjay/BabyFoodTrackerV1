@@ -2,7 +2,6 @@
   'use strict';
 
   const PROFILE = {
-    birthDate: '2025-11-15',
     startDate: '2026-05-18',
     endDate: '2026-07-15',
   };
@@ -14,44 +13,37 @@
   const PLAN = [
     {
       label: 'Week 1',
-      stage: '3 meals · plant-based proteins (lentils, egg, peanut butter)',
-      focus: 'Settle the daily rhythm. Iron-rich red lentils every lunch. Soft, smooth textures.',
-      daily: { meals: '3 meals', portion: '~2–3 tbsp per meal', total: '~80–100 g solids/day', milk: '500–700 ml milk' },
+      stage: '2 meals · 1 fruit + 1 veggie',
+      focus: 'Ease in. One smooth fruit purée in the morning, one smooth veggie purée at midday. No new proteins this week — just settle the rhythm.',
+      daily: { meals: '2 meals', portion: '~2–3 tbsp per meal', total: '~40–60 g solids/day', milk: '600–800 ml milk' },
       days: [
         { date: '2026-05-18', meals: {
-          breakfast: m('Scrambled egg with soft pear', '1 small egg + 2 tbsp pear'),
-          lunch: m('Red lentil + sweet potato purée', '3 tbsp'),
-          dinner: m('Rice porridge with banana', '3 tbsp'),
+          breakfast: m('Pear purée (cooked, smooth)', '2–3 tbsp'),
+          lunch: m('Sweet potato purée', '2–3 tbsp'),
         }},
         { date: '2026-05-19', meals: {
-          breakfast: m('Scrambled egg with avocado mash', '1 small egg + 2 tbsp avocado'),
-          lunch: m('Red lentil + butternut squash purée', '3 tbsp'),
-          dinner: m('Oat porridge with apple', '3 tbsp'),
+          breakfast: m('Apple purée (cooked, smooth)', '2–3 tbsp'),
+          lunch: m('Butternut squash purée', '2–3 tbsp'),
         }},
         { date: '2026-05-20', meals: {
-          breakfast: m('Scrambled egg with soft pear', '1 small egg + 2 tbsp pear'),
-          lunch: m('Red lentil + pumpkin purée', '3 tbsp'),
-          dinner: m('Rice porridge with mango', '3 tbsp'),
+          breakfast: m('Banana mash', '2–3 tbsp'),
+          lunch: m('Pumpkin purée', '2–3 tbsp'),
         }},
         { date: '2026-05-21', meals: {
-          breakfast: m('Oat porridge with thinned peanut butter', '3 tbsp porridge + 1 tsp smooth PB'),
-          lunch: m('Red lentil + parsnip + pea purée', '3 tbsp'),
-          dinner: m('Rice porridge with banana', '3 tbsp'),
+          breakfast: m('Pear purée', '2–3 tbsp'),
+          lunch: m('Parsnip purée', '2–3 tbsp'),
         }},
         { date: '2026-05-22', meals: {
-          breakfast: m('Soft toast finger with thinned peanut butter', '1 toast finger + 1 tsp smooth PB'),
-          lunch: m('Red lentil + zucchini purée', '3 tbsp'),
-          dinner: m('Oat porridge with apple', '3 tbsp'),
+          breakfast: m('Mango purée (very ripe, smooth)', '2–3 tbsp'),
+          lunch: m('Zucchini purée', '2–3 tbsp'),
         }},
         { date: '2026-05-23', meals: {
-          breakfast: m('Oat porridge with peanut butter + banana', '3 tbsp + 1 tsp PB + 1 tbsp banana'),
-          lunch: m('Red lentil + cauliflower purée', '3 tbsp'),
-          dinner: m('Rice porridge with pear', '3 tbsp'),
+          breakfast: m('Apple purée', '2–3 tbsp'),
+          lunch: m('Broccoli purée (soft-steamed)', '2–3 tbsp'),
         }},
         { date: '2026-05-24', meals: {
-          breakfast: m('Oat porridge with apple and banana', '4 tbsp'),
-          lunch: m('Red lentil + broccoli + sweet potato purée', '3 tbsp'),
-          dinner: m('Rice porridge with mango', '3 tbsp'),
+          breakfast: m('Banana mash', '2–3 tbsp'),
+          lunch: m('Cauliflower purée (soft-steamed)', '2–3 tbsp'),
         }},
       ],
     },
@@ -413,7 +405,6 @@
   };
 
   const fmtDate = (iso) => parseDate(iso).toLocaleDateString(undefined, { day: '2-digit', month: 'short' });
-  const fmtLong = (iso) => parseDate(iso).toLocaleDateString(undefined, { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
 
   const todayISO = () => {
     const d = new Date();
@@ -421,19 +412,6 @@
     const mo = String(d.getMonth() + 1).padStart(2, '0');
     const dd = String(d.getDate()).padStart(2, '0');
     return `${y}-${mo}-${dd}`;
-  };
-
-  const ageString = (fromISO, toISO) => {
-    const from = parseDate(fromISO);
-    const to = parseDate(toISO);
-    let months = (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth());
-    let days = to.getDate() - from.getDate();
-    if (days < 0) {
-      months -= 1;
-      const prev = new Date(to.getFullYear(), to.getMonth(), 0);
-      days += prev.getDate();
-    }
-    return `${months} months, ${days} day${days === 1 ? '' : 's'}`;
   };
 
   const dow = (iso) => parseDate(iso).toLocaleDateString(undefined, { weekday: 'short' });
@@ -453,8 +431,6 @@
   if (!state.meals) state.meals = {};
 
   const renderProfile = () => {
-    document.getElementById('birthDate').textContent = fmtLong(PROFILE.birthDate);
-    document.getElementById('ageToday').textContent = ageString(PROFILE.birthDate, todayISO());
     document.getElementById('planWindow').textContent =
       `${fmtDate(PROFILE.startDate)} → ${fmtDate(PROFILE.endDate)} 2026`;
   };
@@ -531,7 +507,7 @@
       <article class="week-card">
         <header class="week-head">
           <h2>${week.label}</h2>
-          <span class="week-dates">${fmtDate(start)} – ${fmtDate(end)} · age ${ageString(PROFILE.birthDate, start)}</span>
+          <span class="week-dates">${fmtDate(start)} – ${fmtDate(end)}</span>
         </header>
         <p class="week-stage">${week.stage}</p>
         ${targets}
