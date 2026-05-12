@@ -283,6 +283,19 @@ p { margin: 0 0 0.6em; }
   font-weight: 600;
 }
 
+.allergen-tag {
+  display: inline-block;
+  background: #14532d;
+  color: #fff;
+  font-size: 0.66rem;
+  padding: 2px 7px;
+  border-radius: 999px;
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
 .shopping {
   max-width: var(--maxw);
   margin: 18px auto;
